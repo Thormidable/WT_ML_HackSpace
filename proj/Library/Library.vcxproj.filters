@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NeuralNetworks">
+      <UniqueIdentifier>{cc3de5f3-763a-4347-82b6-f361c39cb843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Foundation">
+      <UniqueIdentifier>{e01c46ac-a7cf-4125-bf17-f2c2dac94fac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.h">
+      <Filter>NeuralNetworks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\GAILibrary.h" />
+    <ClInclude Include="..\..\src\Library\Foundation\GAIBasicTypes.h">
+      <Filter>Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Foundation\GAIFoundationDeclarations.h">
+      <Filter>Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Foundation\GAIPlatform.h">
+      <Filter>Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Foundation\GAIRandom.h">
+      <Filter>Foundation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.cpp">
+      <Filter>NeuralNetworks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp">
+      <Filter>Foundation</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
