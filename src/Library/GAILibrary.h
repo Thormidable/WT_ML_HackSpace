@@ -6,7 +6,6 @@
 
 #include <Eigen>
 
-
 #include "GAIPlatform.h"
 #include "GAIBasicTypes.h"
 #include "GAIFoundationDeclarations.h"

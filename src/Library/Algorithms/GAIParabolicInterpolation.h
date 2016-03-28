@@ -3,8 +3,6 @@
 
 namespace GAI
 {
-	namespace Base
-	{
 		namespace Optimisation
 		{
 			/*!
@@ -16,7 +14,7 @@ namespace GAI
 			\return This will return the x position of the minimum value of y for y = lpFunction(x).
 
 			*/
-			template<typename tFunction,class tData> tData SuccessiveParabolicInterpolation(tFunction lpFunction,tData lfLowBound, tData lfUpperBound, tData lfAccuracyRequired) 
+			template<class tData,typename tFunction> tData SuccessiveParabolicInterpolation(tFunction lpFunction, tData lfLowBound, tData lfUpperBound, tData lfAccuracyRequired)
 			{
 				tData lfMinSpread = 0.01;
 				tData lpFx[3];
@@ -127,5 +125,4 @@ namespace GAI
 				else return lpX[1];
 			};
 		}
-	}
 }

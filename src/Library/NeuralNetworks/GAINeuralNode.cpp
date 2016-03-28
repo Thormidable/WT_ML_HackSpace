@@ -34,20 +34,51 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T,NeuronFunct
 
 	for (auto &i : mLayerWeights)
 	{		
-		//MatrixIterator(i, [](T &lData){lData = Random<T>(0, 1.0); });
-		MatrixIterator(i, [](T &lData){lData = 0.5f; });
+		MatrixIterator(i, [](T &lData){lData = Random<T>(0, 1.0); });
+		//MatrixIterator(i, [](T &lData){lData = 0.5f; });
 	}
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Train(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
 {
-	auto lDJDW = CalculateCostGradient(lInputValues, lExpected);	
+	T lfLastMove = 10.0f;
+	
+	printf("Starting with a Cost Value of : %f\n", CalculateCostValues(lInputValues, lExpected));
+	for (Size lIterations = 0; lIterations < 1000; ++lIterations)
+	{
+		auto lDJDW = CalculateCostGradient(lInputValues, lExpected);
+		auto lTempOldWeights = mLayerWeights;
 
-	T lfScale = 0.1f;
+		T lActualScale = GAI::Optimisation::SuccessiveParabolicInterpolation<T>(
+			[&](T lfScale)
+		{
+			mLayerWeights = lTempOldWeights;
+			UpdateNeuronWeights(lDJDW, lfScale);
+			return CalculateCostValues(lInputValues, lExpected);
+		},-1000,1000,0.0001f);
+
+		mLayerWeights = lTempOldWeights;
+		T lfMax = UpdateNeuronWeights(lDJDW, lActualScale);
+
+		if (lfMax < 0.000003)
+		{
+			break;
+		}
+	};
+	
+	printf("Optimised To a Cost Value of : %f\n",CalculateCostValues(lInputValues, lExpected));
+}
+
+template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::UpdateNeuronWeights(const std::vector<MatrixDynamic<T>> &lDJDW, T lfScale)
+{
+	T lfNewScale = 0.0;
 	for (Size lLayer = 0; lLayer < mLayerWeights.size(); ++lLayer)
 	{
 		mLayerWeights[lLayer] -= lDJDW[lLayer] * lfScale;
-	}
+		T lMax = std::max(lDJDW[lLayer].maxCoeff(), abs(lDJDW[lLayer].minCoeff()));
+		if (lMax > lfNewScale) lfNewScale = lMax;
+	}		
+	return lfNewScale*lfScale;
 }
 
 template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostValues(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
@@ -70,7 +101,6 @@ template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedF
 	{
 		//Calculate sigmoidPrime of Input Energys
 		auto lFPrimeZ3 = mZ[lLayer];
-//		auto lfTestDiff = (lFPrimeZ3 - (mA[lLayer - 1] * mLayerWeights[lLayer])).eval();
 		MatrixIterator<T>(lFPrimeZ3, &NeuronFunction::Prime);
 
 		//Calculate ErrorFactor * sigmoidPrime(Input energies)
@@ -97,9 +127,9 @@ template<class T, class NeuronFunction> Bool GAI::FeedForwardDense<T, NeuronFunc
 
 	T lEps = 0.0001f;
 
-	for (Size lRow = 0; lRow < mLayerWeights.back().rows(); ++lRow)
+	for (Size lRow = 0; lRow < Size(mLayerWeights.back().rows()); ++lRow)
 	{
-		for (Size lCol = 0; lCol < mLayerWeights.back().cols(); ++lCol)
+		for (Size lCol = 0; lCol < Size(mLayerWeights.back().cols()); ++lCol)
 		{
 			auto lWeighted = mLayerWeights;
 			mLayerWeights.back()(lRow, lCol) += lEps;

@@ -53,6 +53,7 @@ namespace GAI
 		MatrixDynamic<T> Process(const MatrixDynamic<T> &lInputValues);
 		MatrixDynamic<T> ProcessFull(const MatrixDynamic<T> &lInputValues);
 
+		T UpdateNeuronWeights(const std::vector<MatrixDynamic<T>> &lGradients, T lfScale);
 		Bool TestCostFunction(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
 	protected:		
 		

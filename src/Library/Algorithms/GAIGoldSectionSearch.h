@@ -3,8 +3,7 @@
 
 namespace GAI
 {
-	namespace Base
-	{
+	
 		/*! 
 		\brief Collection of Optimisation Functions
 		*/
@@ -20,7 +19,7 @@ namespace GAI
 			\return This will return the x position of the minimum value of y for y = lpFunction(x).
 
 			*/
-			template<typename tFunction,class tData> tData GoldSectionSearch(tFunction lpFunction,tData lfLowBound, tData lfUpperBound, tData lfAccuracyRequired) 
+			template<class tData,typename tFunction> tData GoldSectionSearch(tFunction lpFunction, tData lfLowBound, tData lfUpperBound, tData lfAccuracyRequired)
 			{
 				const tData lfcPhi = static_cast<tData>((1.0 + sqrt(5.0)) / 2.0);
 				const tData lfcResPhi = 2 - lfcPhi;
@@ -44,7 +43,7 @@ namespace GAI
 
 					if(abs(Fx) == std::numeric_limits<tData>::infinity() || Fx!=Fx )
 					{
-						GAI::LogError("Function Evaluation Returned a Non Real Value");
+//						GAI::LogError("Function Evaluation Returned a Non Real Value");
 						return std::numeric_limits<tData>::infinity();
 					}
 
@@ -97,5 +96,5 @@ namespace GAI
 				}while(1);
 			};
 		}
-	}
+
 }
