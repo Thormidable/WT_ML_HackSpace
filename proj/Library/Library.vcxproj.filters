@@ -10,6 +10,12 @@
     <Filter Include="Foundation">
       <UniqueIdentifier>{e01c46ac-a7cf-4125-bf17-f2c2dac94fac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Algorithms">
+      <UniqueIdentifier>{a9f5c2c5-f5da-4d22-86d9-28a31573a07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maths">
+      <UniqueIdentifier>{b828838b-3901-45d5-a154-0bec4a2e2b49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.h">
@@ -28,6 +34,42 @@
     <ClInclude Include="..\..\src\Library\Foundation\GAIRandom.h">
       <Filter>Foundation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIBinarySearch.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIBOBYQA.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIBubbleSort.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIGoldSectionSearch.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIInsertionSort.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAILINCOA.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAILinearRegression.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIParabolicInterpolation.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIRadixSort.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAISelectionSort.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIShellSort.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Library\Maths\GAIMaths.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.cpp">
@@ -35,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp">
       <Filter>Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Library\Algorithms\GAILinearRegression.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Library\Maths\GAIMaths.cpp">
+      <Filter>Maths</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

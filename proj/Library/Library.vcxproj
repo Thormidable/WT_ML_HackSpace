@@ -142,15 +142,29 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIBinarySearch.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIBOBYQA.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIBubbleSort.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIGoldSectionSearch.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIInsertionSort.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAILINCOA.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAILinearRegression.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIParabolicInterpolation.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIRadixSort.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAISelectionSort.h" />
+    <ClInclude Include="..\..\src\Library\Algorithms\GAIShellSort.h" />
     <ClInclude Include="..\..\src\Library\Foundation\GAIBasicTypes.h" />
     <ClInclude Include="..\..\src\Library\Foundation\GAIFoundationDeclarations.h" />
     <ClInclude Include="..\..\src\Library\Foundation\GAIPlatform.h" />
     <ClInclude Include="..\..\src\Library\Foundation\GAIRandom.h" />
     <ClInclude Include="..\..\src\Library\GAILibrary.h" />
+    <ClInclude Include="..\..\src\Library\Maths\GAIMaths.h" />
     <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Library\Algorithms\GAILinearRegression.cpp" />
     <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp" />
+    <ClCompile Include="..\..\src\Library\Maths\GAIMaths.cpp" />
     <ClCompile Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.cpp" />
   </ItemGroup>
   <ItemGroup>
