@@ -18,6 +18,19 @@ namespace GAI
 			}
 		};
 
+		template<class T> class Linear
+		{
+		public:
+			static inline void Function(T &lValue)
+			{
+				(void)lValue;
+			}
+			static inline void Prime(T &lValue)
+			{
+				lValue = 1;
+			}
+		};
+
 		template<class T> class TanH
 		{
 		public:
@@ -62,6 +75,20 @@ namespace GAI
 		inline MatrixDynamic<T> GetResultMatrix(){ return mOutputValues; }
 
 		static T CalculateCostValuesFromResults(const MatrixDynamic<T> &lResults, const MatrixDynamic<T> &lExpected);
+
+		template<class U,class Lambda> static inline void IterateMatrixList(std::vector<MatrixDynamic<T>> &lList, U *g, Lambda lFunc)
+		{
+			for (auto &i : lList)
+			{
+				for (Size lRow = 0; lRow < i.rows(); ++lRow)
+				{
+					for (Size lCol = 0; lCol < i.cols(); ++lCol)
+					{
+						lFunc(*g++, i(lRow, lCol));
+					}
+				}
+			};
+		}
 	protected:		
 		
 		MatrixDynamic<T> ProcessLayer(const MatrixDynamic<T> &lInputs, const MatrixDynamic<T> &lWeights);		

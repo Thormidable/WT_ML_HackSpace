@@ -27,16 +27,7 @@ template<class T, class NeuronFunction> lbfgsfloatval_t NeuronTrainingEvaluation
 
 	auto ldJdW = lInstance->mThis->CalculateCostGradient(lInstance->mInput, lInstance->mExpected);
 
-	for (auto &i : ldJdW)
-	{
-		for (Size lRow = 0; lRow < i.rows(); ++lRow)
-		{
-			for (Size lCol = 0; lCol < i.cols(); ++lCol)
-			{
-				*g++ = i(lRow, lCol);
-			}
-		}
-	};
+	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(ldJdW, g, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lMat; });
 
 	return lInstance->mThis->CalculateCostValuesFromResults(lInstance->mThis->GetResultMatrix(), lInstance->mExpected);
 };
@@ -82,37 +73,19 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T,NeuronFunct
 
 	for (auto &i : mLayerWeights)
 	{		
-		MatrixIterator(i, [](T &lData){lData = Random<T>(0, 1.0); });
-		//MatrixIterator(i, [](T &lData){lData = 0.5f; });
+		MatrixIterator(i, [](T &lData){lData = Random<T>(0.0, 1.0); });
+		//MatrixIterator(i, [](T &lData){lData = T(0.5); });
 	}
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::MoveArrayToWeights(const lbfgsfloatval_t *xCursor)
 {
-	for (auto &i : mLayerWeights)
-	{
-		for (Size lRow = 0; lRow < i.rows(); ++lRow)
-		{
-			for (Size lCol = 0; lCol < i.cols(); ++lCol)
-			{
-				i(lRow, lCol) = *xCursor++;
-			}
-		}
-	}
+	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](const lbfgsfloatval_t &lOne, T &lMat){lMat = lOne; });
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::MoveWeightsToArray(lbfgsfloatval_t *xCursor)
 {	
-	for (auto &i : mLayerWeights)
-	{
-		for (Size lRow = 0; lRow < i.rows(); ++lRow)
-		{
-			for (Size lCol = 0; lCol < i.cols(); ++lCol)
-			{
-				*xCursor++ = i(lRow, lCol);
-			}
-		}
-	}
+	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lMat; });	
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Train(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
@@ -196,10 +169,10 @@ template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedF
 		if(lLayer > 1) lDJdW[lLayer - 1] = (lD3*mLayerWeights[lLayer].transpose()).eval();
 	}
 
-	auto lFPrimeZ3 = (mZ[0]).eval();
+	auto lFPrimeZ3 = mZ[0];
 	MatrixIterator<T>(lFPrimeZ3, &NeuronFunction::Prime);
 
-	lD3 = (lD3*mLayerWeights[1].transpose())*lFPrimeZ3;
+	lD3 = (lD3*(mLayerWeights[1].transpose())).cwiseProduct(lFPrimeZ3);
 	lDJdW[0] = lInputValues.transpose()*lD3;
 
 	return lDJdW;
@@ -209,29 +182,31 @@ template<class T, class NeuronFunction> Bool GAI::FeedForwardDense<T, NeuronFunc
 {
 	auto lfCalculatedGrads = CalculateCostGradient(lInputValues, lExpected);
 
-	MatrixDynamic<T> lPerturbation;
-	lPerturbation.resize(1, 3);
-
 	T lEps = 0.0001f;
 
-	for (Size lRow = 0; lRow < Size(mLayerWeights.back().rows()); ++lRow)
+	for (Size lLayer = mLayerWeights.size(); lLayer-- >0; )
 	{
-		for (Size lCol = 0; lCol < Size(mLayerWeights.back().cols()); ++lCol)
+		auto lWeighted = mLayerWeights[lLayer];
+
+		for (Size lRow = 0; lRow < Size(mLayerWeights[lLayer].rows()); ++lRow)
 		{
-			auto lWeighted = mLayerWeights;
-			mLayerWeights.back()(lRow, lCol) += lEps;
-			T lLoss1 = CalculateCostValues(lInputValues, lExpected);
+			for (Size lCol = 0; lCol < Size(mLayerWeights[lLayer].cols()); ++lCol)
+			{
+				mLayerWeights[lLayer](lRow, lCol) += lEps;
+				T lLoss1 = CalculateCostValues(lInputValues, lExpected);
 
-			mLayerWeights = lWeighted;
-			mLayerWeights.back()(lRow, lCol) -= lEps;
-			T lLoss2 = CalculateCostValues(lInputValues, lExpected);
+				mLayerWeights[lLayer] = lWeighted;
+				mLayerWeights[lLayer](lRow, lCol) -= lEps;
+				T lLoss2 = CalculateCostValues(lInputValues, lExpected);
 
-			mLayerWeights = lWeighted;
+				mLayerWeights[lLayer] = lWeighted;
 
-			auto lfGrads = (lLoss1 - lLoss2) / (2 * lEps);
+				auto lfGrads = (lLoss1 - lLoss2) / (2 * lEps);
 
-			auto lDiffResult = (lfCalculatedGrads.back()(lRow, lCol) - lfGrads);
-			if (abs(lDiffResult) > 0.0000001f) return false;
+				auto lDiffResult = (lfCalculatedGrads[lLayer](lRow, lCol) - lfGrads);
+				if (abs(lDiffResult) > 0.0000001f)
+					return false;
+			}
 		}
 	}
 	return true;
@@ -273,6 +248,7 @@ template<class T, class NeuronFunction> MatrixDynamic<T> GAI::FeedForwardDense<T
 }
 
 #define INSTANCE_NEURON_FUNCTIONS(T) \
-template class GAI::FeedForwardDense<T,NeuronFunctions::Sigmoid<T> >;
+template class GAI::FeedForwardDense<T,NeuronFunctions::Sigmoid<T> >;\
+template class GAI::FeedForwardDense<T,NeuronFunctions::Linear<T> >;
 
 GAI_EXPAND(GAI_FOR_EACH_FLOAT_TYPE(INSTANCE_NEURON_FUNCTIONS))
