@@ -13,13 +13,13 @@ namespace GAI
 	template<class T> void DisplayMatrix(const MatrixDynamic<T> &lMatrix, std::string lsName)
 	{
 		printf("Matrix : %s\n", lsName.c_str());
-		for (Size lRows = 0; lRows < lMatrix.rows(); ++lRows)
+		for (Size lRows = 0; lRows < Size(lMatrix.rows()); ++lRows)
 		{
 			printf("\t");
-			for (Size lColumns = 0; lColumns < lMatrix.cols(); ++lColumns)
+			for (Size lColumns = 0; lColumns < Size(lMatrix.cols()); ++lColumns)
 			{
 				printf("%f", lMatrix(lRows, lColumns));
-				if (lColumns < lMatrix.cols() - 1) printf(" , ");
+				if (lColumns < Size(lMatrix.cols() - 1)) printf(" , ");
 				else printf("\n");
 			}
 		}

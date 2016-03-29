@@ -30,7 +30,7 @@ template<class T, class NeuronFunction> lbfgsfloatval_t NeuronTrainingEvaluation
 
 	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(ldJdW, g, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lMat; });
 
-	return lInstance->mThis->CalculateCostValuesFromResults(lInstance->mThis->GetResultMatrix(), lInstance->mExpected);
+	return lInstance->mThis->CalculateCostValuesFromResults(lInstance->mExpected);
 };
 
 
@@ -44,6 +44,7 @@ template<class T, class NeuronFunction> int NeuronTrainingProgress(void *instanc
 
 template<class T, class NeuronFunction> GAI::FeedForwardDense<T,NeuronFunction>::FeedForwardDense(Size lInputDims, Size lLayerSize, Size lLayers, Size lOutputDims)
 {
+	mRegularisationFactor = T(0.0);
 	Resize(lInputDims, lLayerSize, lLayers, lOutputDims);
 }
 
@@ -79,12 +80,12 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T,NeuronFunct
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::MoveArrayToWeights(const lbfgsfloatval_t *xCursor)
 {
-	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](const lbfgsfloatval_t &lOne, T &lMat){lMat = lOne; });
+	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](const lbfgsfloatval_t &lOne, T &lMat){lMat = T(lOne); });
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::MoveWeightsToArray(lbfgsfloatval_t *xCursor)
 {	
-	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lMat; });	
+	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lbfgsfloatval_t(lMat); });
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Train(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
@@ -95,8 +96,7 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunc
 
 	Size lParameters = 0;
 	for (auto &i : mLayerWeights){lParameters += i.rows()*i.cols();}
-
-	int i, ret = 0;
+	
 	lbfgsfloatval_t fx;
 	lbfgsfloatval_t *x = lbfgs_malloc(lParameters);
 	lbfgs_parameter_t param;
@@ -137,14 +137,19 @@ template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunctio
 
 template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostValues(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
 {
-	auto lResults = ProcessFull(lInputValues);
-	return CalculateCostValuesFromResults(lResults, lExpected);
+	ProcessFull(lInputValues);
+	return CalculateCostValuesFromResults(lExpected);
 }
 
-template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostValuesFromResults(const MatrixDynamic<T> &lResults, const MatrixDynamic<T> &lExpected)
+template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostValuesFromResults(const MatrixDynamic<T> &lExpected)
 {
-	auto lEval = (lResults - lExpected);
-	return (lEval.cwiseProduct(lEval).array()).sum()*T(0.5);
+	auto lEval = (mOutputValues - lExpected);	
+
+	T lfRegulisation = T(0);
+	for (auto &i : mLayerWeights){ lfRegulisation += i.cwiseProduct(i).sum(); }
+	lfRegulisation *= (mRegularisationFactor / 2);
+
+	return (lEval.cwiseProduct(lEval).array()).sum()*T(0.5)/T(lExpected.rows()) + lfRegulisation;
 }
 
 template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostGradient(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
@@ -164,7 +169,7 @@ template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedF
 
 		//Calculate ErrorFactor * sigmoidPrime(Input energies)
 		lD3 = lDJdW[lLayer].cwiseProduct(lFPrimeZ3);
-		lDJdW[lLayer] = mA[lLayer - 1].transpose() * lD3;
+		lDJdW[lLayer] = (mA[lLayer - 1].transpose() * lD3) / T(lInputValues.rows()) + (mLayerWeights[lLayer]*mRegularisationFactor);
 		if(lLayer > 1) lDJdW[lLayer - 1] = (lD3*mLayerWeights[lLayer].transpose()).eval();
 	}
 
@@ -172,7 +177,7 @@ template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedF
 	MatrixIterator<T>(lFPrimeZ3, &NeuronFunction::Prime);
 
 	lD3 = (lD3*(mLayerWeights[1].transpose())).cwiseProduct(lFPrimeZ3);
-	lDJdW[0] = lInputValues.transpose()*lD3;
+	lDJdW[0] = (lInputValues.transpose()*lD3) / T(lInputValues.rows()) + (mLayerWeights[0] * mRegularisationFactor);
 
 	return lDJdW;
 }

@@ -52,6 +52,9 @@ namespace GAI
 		void Resize(Size lInputDims, Size lLayerSize, Size lLayers, Size lOutputDims);
 		void Randomise();
 
+		void SetRegularisation(T lReg){ mRegularisationFactor = lReg; };
+		T GetRegularisation(){ return mRegularisationFactor; }
+
 		void Train(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
 		T CalculateCostValues(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
 		std::vector<MatrixDynamic<T>> CalculateCostGradient(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
@@ -66,15 +69,15 @@ namespace GAI
 
 		inline MatrixDynamic<T> GetResultMatrix(){ return mOutputValues; }
 
-		static T CalculateCostValuesFromResults(const MatrixDynamic<T> &lResults, const MatrixDynamic<T> &lExpected);
+		T CalculateCostValuesFromResults(const MatrixDynamic<T> &lExpected);
 
 		template<class U,class Lambda> static inline void IterateMatrixList(std::vector<MatrixDynamic<T>> &lList, U *g, Lambda lFunc)
 		{
 			for (auto &i : lList)
 			{
-				for (Size lRow = 0; lRow < i.rows(); ++lRow)
+				for (Size lRow = 0; lRow < Size(i.rows()); ++lRow)
 				{
-					for (Size lCol = 0; lCol < i.cols(); ++lCol)
+					for (Size lCol = 0; lCol < Size(i.cols()); ++lCol)
 					{
 						lFunc(*g++, i(lRow, lCol));
 					}
@@ -83,8 +86,6 @@ namespace GAI
 		}
 	protected:		
 		
-		MatrixDynamic<T> ProcessLayer(const MatrixDynamic<T> &lInputs, const MatrixDynamic<T> &lWeights);		
-
 		MatrixDynamic<T> mInputWeights;
 		std::vector<MatrixDynamic<T>> mLayerWeights;		
 		std::vector<MatrixDynamic<T>> mA;
@@ -94,6 +95,8 @@ namespace GAI
 		Size mInputDims;
 		Size mLayers;
 		Size mLayerSize;
+
+		T mRegularisationFactor;
 	};
 
 }

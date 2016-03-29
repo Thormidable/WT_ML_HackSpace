@@ -8,7 +8,7 @@ int main()
 
 	time_t lTime;
 	time(&lTime);
-	RandomSeed(lTime);
+	RandomSeed(UInt32(lTime));
 
 	FeedForwardDense<Float64, NeuronFunctions::Sigmoid<Float64>>  lFFDense(2, 3, 1, 1);
 
@@ -32,9 +32,28 @@ int main()
 	DisplayMatrix(lInput, "Input Matrix");
 	DisplayMatrix(lExpected, "Expected Results Matrix");
 
+	MatrixDynamic<Float64> lTestingInput;
+	lTestingInput.resize(4, 2);
+	lTestingInput << 4, 4, 9, 6,
+					5.5, 1, 2.5, 2;
+	MatrixDynamic<Float64> lTestingExpected;
+	lTestingExpected.resize(4, 1);
+	lTestingExpected << 0.7, 0.89, 0.85, 0.75;
+
 	if (!lFFDense.TestCostFunction(lInput, lExpected)) return 1;
 
 	lFFDense.Train(lInput, lExpected);
+
+	DisplayMatrix(lFFDense.GetResultMatrix(), "Trained Results Matrix");
+
+	Float64 lfTrainedError = lFFDense.CalculateCostValues(lInput, lExpected);
+	Float64 lfTestingError = lFFDense.CalculateCostValues(lTestingInput, lTestingExpected);
+
+	if (lfTestingError> lfTrainedError*Float64(10))
+	{
+		printf("Testing does not match Training results : %f is much greater than %f\n", lfTestingError, lfTrainedError);
+	}
+	
 
 	system("pause");
 	return 0;
