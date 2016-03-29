@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\src\Library\GAILibrary.h" />
     <ClInclude Include="..\..\src\Library\Maths\GAIMaths.h" />
     <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.h" />
+    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuronFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Library\Algorithms\GAILinearRegression.cpp" />

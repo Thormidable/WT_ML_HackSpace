@@ -28,5 +28,6 @@
 #include "GAISelectionSort.h"
 #include "GAIShellSort.h"
 
+#include "GAINeuronFunctions.h"
 #include "GAIFeedForwardBackwardsPropogation.h"
 

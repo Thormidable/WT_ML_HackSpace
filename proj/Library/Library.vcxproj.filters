@@ -70,6 +70,9 @@
     <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.h">
       <Filter>NeuralNetworks</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuronFunctions.h">
+      <Filter>NeuralNetworks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp">
