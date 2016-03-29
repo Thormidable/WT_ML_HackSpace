@@ -6,13 +6,14 @@ using namespace GAI;
 template<class T, class NeuronFunction> class NeuronTraining
 {
 public:
-	NeuronTraining(GAI::FeedForwardDense<T, NeuronFunction>* lThis,const MatrixDynamic<T> &lInput,const MatrixDynamic<T> &lExpected) : mThis(lThis), mInput(lInput), mExpected(lExpected)
+	NeuronTraining(GAI::FeedForwardDense<T, NeuronFunction>* lThis, const MatrixDynamic<T> &lInput, const MatrixDynamic<T> &lExpected) : mThis(lThis), mInput(lInput), mExpected(lExpected), mIterations(0)
 	{
 
 	}
 	GAI::FeedForwardDense<T, NeuronFunction>* mThis;
 	const MatrixDynamic<T> &mInput;
 	const MatrixDynamic<T> &mExpected;
+	Size mIterations;
 };
 
 template<class T, class NeuronFunction> lbfgsfloatval_t NeuronTrainingEvaluation(
@@ -33,11 +34,10 @@ template<class T, class NeuronFunction> lbfgsfloatval_t NeuronTrainingEvaluation
 };
 
 
-int NeuronTrainingProgress(void *instance, const lbfgsfloatval_t *x, const lbfgsfloatval_t *g, const lbfgsfloatval_t fx, const lbfgsfloatval_t xnorm, const lbfgsfloatval_t gnorm, const lbfgsfloatval_t step, int n, int k, int ls)
+template<class T, class NeuronFunction> int NeuronTrainingProgress(void *instance, const lbfgsfloatval_t *x, const lbfgsfloatval_t *g, const lbfgsfloatval_t fx, const lbfgsfloatval_t xnorm, const lbfgsfloatval_t gnorm, const lbfgsfloatval_t step, int n, int k, int ls)
 {
-	printf("Iteration %d:\n", k);
-	printf("  fx = %f\n", fx);
-	printf("\n");
+	auto lInstance = reinterpret_cast<NeuronTraining<T, NeuronFunction>*>(instance);
+	lInstance->mIterations++;
 	return 0;
 }
 
@@ -74,7 +74,6 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T,NeuronFunct
 	for (auto &i : mLayerWeights)
 	{		
 		MatrixIterator(i, [](T &lData){lData = Random<T>(0.0, 1.0); });
-		//MatrixIterator(i, [](T &lData){lData = T(0.5); });
 	}
 }
 
@@ -116,12 +115,12 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunc
 	param.ftol = 0.0000001;
 	param.gtol = 0.9;
 
-	lbfgs(lParameters, x, &fx, NeuronTrainingEvaluation<T,NeuronFunction>, NeuronTrainingProgress, &lInstance, &param);
+	lbfgs(lParameters, x, &fx, NeuronTrainingEvaluation<T, NeuronFunction>, NeuronTrainingProgress<T, NeuronFunction>, &lInstance, &param);
 	
 	MoveArrayToWeights(x);
 	lbfgs_free(x);
 	
-	printf("Optimised To a Cost Value of : %f\n",CalculateCostValues(lInputValues, lExpected));
+	printf("Optimised To a Cost Value of : %f in %u iterations\n",CalculateCostValues(lInputValues, lExpected),lInstance.mIterations);
 }
 
 template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::UpdateNeuronWeights(const std::vector<MatrixDynamic<T>> &lDJDW, T lfScale)

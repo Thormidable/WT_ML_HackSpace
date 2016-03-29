@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
 
 #include "lbfgs.h"
 
@@ -28,5 +29,4 @@
 #include "GAIShellSort.h"
 
 #include "GAINeuralNode.h"
-
 
