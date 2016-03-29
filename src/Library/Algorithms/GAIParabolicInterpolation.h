@@ -16,7 +16,7 @@ namespace GAI
 			*/
 			template<class tData,typename tFunction> tData SuccessiveParabolicInterpolation(tFunction lpFunction, tData lfLowBound, tData lfUpperBound, tData lfAccuracyRequired)
 			{
-				tData lfMinSpread = 0.01;
+				tData lfMinSpread = tData(0.01);
 				tData lpFx[3];
 				tData lpX[3];
 				lpX[0] = lfLowBound;
@@ -34,7 +34,7 @@ namespace GAI
 				Int32 liCount = 100;
 				do
 				{
-					lfMinSpread*=88.8;
+					lfMinSpread*=tData(88.8);
 					//Generate The parabola ( Ax^2+BX+C = Y)
 					// C is not necessary for finding the minimum
 

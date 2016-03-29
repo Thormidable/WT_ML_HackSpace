@@ -147,6 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Dependencies\LibLBFGS\lib\lib.vcxproj">
+      <Project>{c4405b73-a899-44bf-8681-04ce040b6705}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Library\Library.vcxproj">
       <Project>{f1462e4e-01f1-4cd7-8862-f8975b146a80}</Project>
     </ProjectReference>

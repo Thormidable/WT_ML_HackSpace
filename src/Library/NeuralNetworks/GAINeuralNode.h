@@ -55,15 +55,22 @@ namespace GAI
 
 		T UpdateNeuronWeights(const std::vector<MatrixDynamic<T>> &lGradients, T lfScale);
 		Bool TestCostFunction(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
+
+		void MoveWeightsToArray(lbfgsfloatval_t *);
+		void MoveArrayToWeights(const lbfgsfloatval_t *);
+
+		inline MatrixDynamic<T> GetResultMatrix(){ return mOutputValues; }
+
+		static T CalculateCostValuesFromResults(const MatrixDynamic<T> &lResults, const MatrixDynamic<T> &lExpected);
 	protected:		
 		
-		MatrixDynamic<T> ProcessLayer(const MatrixDynamic<T> &lInputs, const MatrixDynamic<T> &lWeights);
+		MatrixDynamic<T> ProcessLayer(const MatrixDynamic<T> &lInputs, const MatrixDynamic<T> &lWeights);		
 
 		MatrixDynamic<T> mInputWeights;
 		std::vector<MatrixDynamic<T>> mLayerWeights;		
 		std::vector<MatrixDynamic<T>> mA;
 		std::vector<MatrixDynamic<T>> mZ;
-		MatrixDynamic<T> mOutputWeights;
+		MatrixDynamic<T> mOutputValues;
 
 		Size mInputDims;
 		Size mLayers;

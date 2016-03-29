@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 
+#include "lbfgs.h"
+
 #include <Eigen>
 
 #include "GAIPlatform.h"

@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PreBuild", "..\proj\PreBuil
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApp", "..\proj\ConsoleApp\ConsoleApp.vcxproj", "{53399D2C-9027-46DD-AE9E-80E4646583CF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{47058B3A-D6BC-4720-9B89-B8B55AC0E16F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib", "..\src\Dependencies\LibLBFGS\lib\lib.vcxproj", "{C4405B73-A899-44BF-8681-04CE040B6705}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -40,8 +44,17 @@ Global
 		{53399D2C-9027-46DD-AE9E-80E4646583CF}.Release|Win32.ActiveCfg = Release|Win32
 		{53399D2C-9027-46DD-AE9E-80E4646583CF}.Release|Win32.Build.0 = Release|Win32
 		{53399D2C-9027-46DD-AE9E-80E4646583CF}.Release|x64.ActiveCfg = Release|Win32
+		{C4405B73-A899-44BF-8681-04CE040B6705}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C4405B73-A899-44BF-8681-04CE040B6705}.Debug|Win32.Build.0 = Debug|Win32
+		{C4405B73-A899-44BF-8681-04CE040B6705}.Debug|x64.ActiveCfg = Debug|Win32
+		{C4405B73-A899-44BF-8681-04CE040B6705}.Release|Win32.ActiveCfg = Release|Win32
+		{C4405B73-A899-44BF-8681-04CE040B6705}.Release|Win32.Build.0 = Release|Win32
+		{C4405B73-A899-44BF-8681-04CE040B6705}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4405B73-A899-44BF-8681-04CE040B6705} = {47058B3A-D6BC-4720-9B89-B8B55AC0E16F}
 	EndGlobalSection
 EndGlobal
