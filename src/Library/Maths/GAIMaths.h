@@ -24,4 +24,19 @@ namespace GAI
 			}
 		}
 	}
+
+
+	template<class T,class U, class Lambda> static inline void IterateMatrixList(std::vector<MatrixDynamic<T>> &lList, U *g, Lambda lFunc)
+	{
+		for (auto &i : lList)
+		{
+			for (Size lRow = 0; lRow < Size(i.rows()); ++lRow)
+			{
+				for (Size lCol = 0; lCol < Size(i.cols()); ++lCol)
+				{
+					lFunc(*g++, i(lRow, lCol));
+				}
+			}
+		};
+	}
 }

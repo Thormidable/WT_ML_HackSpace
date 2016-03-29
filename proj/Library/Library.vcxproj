@@ -163,13 +163,13 @@
     <ClInclude Include="..\..\src\Library\Foundation\GAIRandom.h" />
     <ClInclude Include="..\..\src\Library\GAILibrary.h" />
     <ClInclude Include="..\..\src\Library\Maths\GAIMaths.h" />
-    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.h" />
+    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Library\Algorithms\GAILinearRegression.cpp" />
     <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp" />
     <ClCompile Include="..\..\src\Library\Maths\GAIMaths.cpp" />
-    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.cpp" />
+    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PreBuild\PreBuild.vcxproj">

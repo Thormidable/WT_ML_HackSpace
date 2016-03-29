@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.h">
-      <Filter>NeuralNetworks</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Library\GAILibrary.h" />
     <ClInclude Include="..\..\src\Library\Foundation\GAIBasicTypes.h">
       <Filter>Foundation</Filter>
@@ -70,11 +67,11 @@
     <ClInclude Include="..\..\src\Library\Maths\GAIMaths.h">
       <Filter>Maths</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.h">
+      <Filter>NeuralNetworks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAINeuralNode.cpp">
-      <Filter>NeuralNetworks</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp">
       <Filter>Foundation</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Library\Maths\GAIMaths.cpp">
       <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.cpp">
+      <Filter>NeuralNetworks</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

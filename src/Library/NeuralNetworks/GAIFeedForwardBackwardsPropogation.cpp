@@ -28,7 +28,7 @@ template<class T, class NeuronFunction> lbfgsfloatval_t NeuronTrainingEvaluation
 
 	auto ldJdW = lInstance->mThis->CalculateCostGradient(lInstance->mInput, lInstance->mExpected);
 
-	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(ldJdW, g, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lMat; });
+	IterateMatrixList<T, lbfgsfloatval_t>(ldJdW, g, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lMat; });
 
 	return lInstance->mThis->CalculateCostValuesFromResults(lInstance->mExpected);
 };
@@ -80,12 +80,12 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T,NeuronFunct
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::MoveArrayToWeights(const lbfgsfloatval_t *xCursor)
 {
-	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](const lbfgsfloatval_t &lOne, T &lMat){lMat = T(lOne); });
+	IterateMatrixList<T,const lbfgsfloatval_t>(mLayerWeights, xCursor, [](const lbfgsfloatval_t &lOne, T &lMat){lMat = T(lOne); });
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::MoveWeightsToArray(lbfgsfloatval_t *xCursor)
 {	
-	GAI::FeedForwardDense<T, NeuronFunction>::IterateMatrixList(mLayerWeights, xCursor, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lbfgsfloatval_t(lMat); });
+	IterateMatrixList<T,lbfgsfloatval_t>(mLayerWeights, xCursor, [](lbfgsfloatval_t &lOne, T &lMat){lOne = lbfgsfloatval_t(lMat); });
 }
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Train(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
@@ -121,18 +121,6 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunc
 	lbfgs_free(x);
 	
 	printf("Optimised To a Cost Value of : %f in %u iterations\n",CalculateCostValues(lInputValues, lExpected),lInstance.mIterations);
-}
-
-template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::UpdateNeuronWeights(const std::vector<MatrixDynamic<T>> &lDJDW, T lfScale)
-{
-	T lfNewScale = 0.0;
-	for (Size lLayer = 0; lLayer < mLayerWeights.size(); ++lLayer)
-	{
-		mLayerWeights[lLayer] -= lDJDW[lLayer] * lfScale;
-		T lMax = std::max(lDJDW[lLayer].maxCoeff(), abs(lDJDW[lLayer].minCoeff()));
-		if (lMax > lfNewScale) lfNewScale = lMax;
-	}		
-	return lfNewScale*lfScale;
 }
 
 template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostValues(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)

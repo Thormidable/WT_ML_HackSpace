@@ -56,34 +56,21 @@ namespace GAI
 		T GetRegularisation(){ return mRegularisationFactor; }
 
 		void Train(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
-		T CalculateCostValues(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
-		std::vector<MatrixDynamic<T>> CalculateCostGradient(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
+
 		MatrixDynamic<T> Process(const MatrixDynamic<T> &lInputValues);
 		MatrixDynamic<T> ProcessFull(const MatrixDynamic<T> &lInputValues);
+		inline MatrixDynamic<T> GetResultMatrix(){ return mOutputValues; }
 
-		T UpdateNeuronWeights(const std::vector<MatrixDynamic<T>> &lGradients, T lfScale);
+		T CalculateCostValues(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
+
 		Bool TestCostFunction(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
 
 		void MoveWeightsToArray(lbfgsfloatval_t *);
 		void MoveArrayToWeights(const lbfgsfloatval_t *);
 
-		inline MatrixDynamic<T> GetResultMatrix(){ return mOutputValues; }
-
+		std::vector<MatrixDynamic<T>> CalculateCostGradient(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected);
 		T CalculateCostValuesFromResults(const MatrixDynamic<T> &lExpected);
 
-		template<class U,class Lambda> static inline void IterateMatrixList(std::vector<MatrixDynamic<T>> &lList, U *g, Lambda lFunc)
-		{
-			for (auto &i : lList)
-			{
-				for (Size lRow = 0; lRow < Size(i.rows()); ++lRow)
-				{
-					for (Size lCol = 0; lCol < Size(i.cols()); ++lCol)
-					{
-						lFunc(*g++, i(lRow, lCol));
-					}
-				}
-			};
-		}
 	protected:		
 		
 		MatrixDynamic<T> mInputWeights;
