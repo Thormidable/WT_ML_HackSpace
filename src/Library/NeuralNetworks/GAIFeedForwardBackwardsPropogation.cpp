@@ -135,9 +135,9 @@ template<class T, class NeuronFunction> T GAI::FeedForwardDense<T, NeuronFunctio
 
 	T lfRegulisation = T(0);
 	for (auto &i : mLayerWeights){ lfRegulisation += i.cwiseProduct(i).sum(); }
-	lfRegulisation *= (mRegularisationFactor / 2);
+	lfRegulisation *= (mRegularisationFactor / 2)*T(lExpected.rows());
 
-	return (lEval.cwiseProduct(lEval).array()).sum()*T(0.5)/T(lExpected.rows()) + lfRegulisation;
+	return (lEval.cwiseProduct(lEval).array()).sum()*T(0.5) + lfRegulisation;
 }
 
 template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedForwardDense<T, NeuronFunction>::CalculateCostGradient(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected)
@@ -157,7 +157,7 @@ template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedF
 
 		//Calculate ErrorFactor * sigmoidPrime(Input energies)
 		lD3 = lDJdW[lLayer].cwiseProduct(lFPrimeZ3);
-		lDJdW[lLayer] = (mA[lLayer - 1].transpose() * lD3) / T(lInputValues.rows()) + (mLayerWeights[lLayer]*mRegularisationFactor);
+		lDJdW[lLayer] = (mA[lLayer - 1].transpose() * lD3) + (mLayerWeights[lLayer] * mRegularisationFactor*T(lInputValues.rows()));
 		if(lLayer > 1) lDJdW[lLayer - 1] = (lD3*mLayerWeights[lLayer].transpose()).eval();
 	}
 
@@ -165,7 +165,7 @@ template<class T, class NeuronFunction> std::vector<MatrixDynamic<T>> GAI::FeedF
 	MatrixIterator<T>(lFPrimeZ3, &NeuronFunction::Prime);
 
 	lD3 = (lD3*(mLayerWeights[1].transpose())).cwiseProduct(lFPrimeZ3);
-	lDJdW[0] = (lInputValues.transpose()*lD3) / T(lInputValues.rows()) + (mLayerWeights[0] * mRegularisationFactor);
+	lDJdW[0] = (lInputValues.transpose()*lD3) + (mLayerWeights[0] * mRegularisationFactor*T(lInputValues.rows()));
 
 	return lDJdW;
 }
