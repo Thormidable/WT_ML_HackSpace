@@ -39,4 +39,12 @@ namespace GAI
 			}
 		};
 	}
+
+	template<class T> void NormaliseInputDataSet(MatrixDynamic<T> &lMatrix)
+	{
+		for (Size lCol = 0; lCol < Size(lMatrix.cols()); ++lCol)
+		{
+			lMatrix.middleCols<1>(lCol) /= lMatrix.middleCols<1>(lCol).maxCoeff();
+		}
+	}
 }

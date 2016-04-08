@@ -16,6 +16,7 @@
 #include "GAIRandom.h"
 #include "GAIMaths.h"
 
+#include "GAIFisherYatesShuffle.h"
 #include "GAIBinarySearch.h"
 #include "GAIBOBYQA.h"
 #include "GAIBubbleSort.h"
@@ -30,4 +31,5 @@
 
 #include "GAINeuronFunctions.h"
 #include "GAIFeedForwardBackwardsPropogation.h"
+#include "GAIFFBPEnergised.h"
 

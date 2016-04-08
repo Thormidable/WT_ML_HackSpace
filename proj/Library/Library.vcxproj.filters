@@ -73,6 +73,9 @@
     <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuronFunctions.h">
       <Filter>NeuralNetworks</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFFBPEnergised.h">
+      <Filter>NeuralNetworks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp">
@@ -85,6 +88,9 @@
       <Filter>Maths</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.cpp">
+      <Filter>NeuralNetworks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAIFFBPEnergised.cpp">
       <Filter>NeuralNetworks</Filter>
     </ClCompile>
   </ItemGroup>

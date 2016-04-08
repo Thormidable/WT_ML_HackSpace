@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\..\src\TestSets\GAIDataSets.h" />
+    <ClInclude Include="..\..\src\TestSets\Medical\BreastCancer.h">
+      <Filter>Medical</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Medical">
+      <UniqueIdentifier>{d93c7cfa-bb4f-434a-8859-6dc81e782e4e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\TestSets\Medical\BreastCancer.cpp">
+      <Filter>Medical</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

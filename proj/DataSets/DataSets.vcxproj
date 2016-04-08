@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F1462E4E-01F1-4CD7-8862-F8975B146A80}</ProjectGuid>
+    <ProjectGuid>{0BD59600-E60F-414F-99F9-DBFE3DDA52F0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Library</RootNamespace>
   </PropertyGroup>
@@ -143,41 +143,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIBinarySearch.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIBOBYQA.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIBubbleSort.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIGoldSectionSearch.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIInsertionSort.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAILINCOA.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAILinearRegression.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIParabolicInterpolation.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIRadixSort.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAISelectionSort.h" />
-    <ClInclude Include="..\..\src\Library\Algorithms\GAIShellSort.h" />
-    <ClInclude Include="..\..\src\Library\Foundation\GAIBasicTypes.h" />
-    <ClInclude Include="..\..\src\Library\Foundation\GAIFoundationDeclarations.h" />
-    <ClInclude Include="..\..\src\Library\Foundation\GAIPlatform.h" />
-    <ClInclude Include="..\..\src\Library\Foundation\GAIRandom.h" />
-    <ClInclude Include="..\..\src\Library\GAILibrary.h" />
-    <ClInclude Include="..\..\src\Library\Maths\GAIMaths.h" />
-    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.h" />
-    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAIFFBPEnergised.h" />
-    <ClInclude Include="..\..\src\Library\NeuralNetworks\GAINeuronFunctions.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\Library\Algorithms\GAILinearRegression.cpp" />
-    <ClCompile Include="..\..\src\Library\Foundation\GAIRandom.cpp" />
-    <ClCompile Include="..\..\src\Library\Maths\GAIMaths.cpp" />
-    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAIFeedForwardBackwardsPropogation.cpp" />
-    <ClCompile Include="..\..\src\Library\NeuralNetworks\GAIFFBPEnergised.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PreBuild\PreBuild.vcxproj">
       <Project>{bff341b7-7fae-44c5-a9b4-d23f5369a489}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\TestSets\GAIDataSets.h" />
+    <ClInclude Include="..\..\src\TestSets\Medical\BreastCancer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\TestSets\Medical\BreastCancer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
