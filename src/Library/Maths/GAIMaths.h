@@ -25,6 +25,66 @@ namespace GAI
 		}
 	}
 
+	template<class T> void Write(const MatrixDynamic<T> &lMatrix, std::ostream &lStream)
+	{
+		UInt64 lRows = sizeof(T);
+		lStream.write((char*)&lRows, sizeof(UInt64));
+		lRows = lMatrix.rows();
+		lStream.write((char*)&lRows, sizeof(UInt64));
+		lRows = lMatrix.cols();
+		lStream.write((char*)&lRows, sizeof(UInt64));
+		lStream.write((char*)lMatrix.data(), sizeof(T)*lMatrix.rows()*lMatrix.cols());
+	}
+
+	template<class T> void Read(MatrixDynamic<T> &lMatrix, std::istream &lStream)
+	{
+		UInt64 lRows;
+		UInt64 lCols;
+		lStream.read((char*)&lRows, sizeof(UInt64));
+		if (lRows != sizeof(T)) { printf("ERROR : Matrix Type is wrong size\n"); }
+		
+		lStream.read((char*)&lRows, sizeof(UInt64));
+		lStream.read((char*)&lCols, sizeof(UInt64));
+
+		lMatrix.resize(Int32(lRows), Int32(lCols));
+		lStream.read((char*)lMatrix.data(), sizeof(T)*lRows*lCols);
+	}
+
+	template<class T> void Write(const std::vector<T> &lVector, std::ostream &lStream)
+	{
+		UInt64 lRows = sizeof(T);
+		lStream.write((char*)&lRows, sizeof(UInt64));
+		lRows = lVector.size();
+		lStream.write((char*)&lRows, sizeof(UInt64));
+		for (auto &i : lVector)
+		{
+			Write(i, lStream);
+		}
+	}
+
+	template<class T> void Read(std::vector<T> &lVector, std::istream &lStream)
+	{
+		UInt64 lRows;
+		lStream.read((char*)&lRows, sizeof(UInt64));
+		if (lRows != sizeof(T)) { printf("ERROR : Matrix Type is wrong size\n"); }
+		
+		lStream.read((char*)&lRows, sizeof(UInt64));
+		lVector.resize(UInt32(lRows));
+		for (auto &i : lVector)
+		{
+			Read(i, lStream);
+		}
+	}
+
+	template<class T> void Write(const T &lVector, std::ostream &lStream)
+	{
+		lStream.write((char*)&lVector, sizeof(T));
+	}
+
+	template<class T> void Read(T &lVector, std::istream &lStream)
+	{
+		lStream.read((char*)&lVector, sizeof(T));
+	}
 
 	template<class T,class U, class Lambda> static inline void IterateMatrixList(std::vector<MatrixDynamic<T>> &lList, U *g, Lambda lFunc)
 	{

@@ -145,6 +145,66 @@ template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunc
 	printf("Optimised To a Cost Value of : %f in %u iterations\n",CalculateCostValues(lInputValues, lExpected),lInstance.mIterations);
 }
 
+template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Save(StringWide lsPath)
+{
+	std::ofstream lFStream;
+	lFStream.open(lsPath.c_str(), std::ios::out | std::ios::binary);
+
+	if (!lFStream.is_open())
+	{
+		printf("ERROR : Unable to open file\n");
+		return;
+	}
+	
+	Write(lFStream);
+
+	lFStream.close();
+}
+
+template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Load(StringWide lsPath)
+{
+	std::ifstream lFStream;
+	lFStream.open(lsPath.c_str(), std::ios::in | std::ios::binary);
+
+	if (!lFStream.is_open())
+	{
+		printf("ERROR : Unable to open file\n");
+		return;
+	}
+
+	Read(lFStream);
+
+	lFStream.close();
+}
+
+template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Read(std::istream &lFStream)
+{
+	UInt64 lRows;
+	lFStream.read((char*)&lRows, sizeof(UInt64));
+	if (lRows != sizeof(T))
+	{
+		printf("ERROR: Type Size does not match Expected sizeof");
+		return;
+	}
+	GAI::Read(mInputWeights, lFStream);
+	GAI::Read(mLayerWeights, lFStream);
+	GAI::Read(mA, lFStream);
+	GAI::Read(mZ, lFStream);
+	GAI::Read(mOutputValues, lFStream);
+	GAI::Read(mRegularisationFactor, lFStream);
+}
+template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::Write(std::ostream &lFStream)
+{
+	UInt64 lRows = sizeof(T);
+	lFStream.write((char*)&lRows, sizeof(UInt64));
+
+	GAI::Write(mInputWeights, lFStream);
+	GAI::Write(mLayerWeights, lFStream);
+	GAI::Write(mA, lFStream);
+	GAI::Write(mZ, lFStream);
+	GAI::Write(mOutputValues, lFStream);
+	GAI::Write(mRegularisationFactor, lFStream);
+}
 
 template<class T, class NeuronFunction> void GAI::FeedForwardDense<T, NeuronFunction>::StochasticTraining(const MatrixDynamic<T> &lInputValues, const MatrixDynamic<T> &lExpected, Size lBatchSize, T lfScale, T lfTolerance)
 {

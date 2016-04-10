@@ -95,6 +95,7 @@ int main()
 
 	if (!lFFDense2.TestCostFunction(lSchotasticTraining, lSchotasticExpected)) return 1;
 	lFFDense2.Train(lSchotasticTraining, lSchotasticExpected);
+	lFFDense2.Save(L"./MalignancyTest.NN");
 
 	//lFFDense2.Randomise();
 	//lFFDense2.StochasticTraining(lSchotasticTraining, lSchotasticExpected,10,1,0.0000001);

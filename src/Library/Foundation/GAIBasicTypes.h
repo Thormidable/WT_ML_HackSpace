@@ -155,5 +155,8 @@ namespace GAI
 
 	typedef unsigned short tAPIImageType;
 	typedef Float64 tDatabaseDataType;
-	
+
+	typedef std::wstring StringWide;
+	typedef std::string StringChar;
+
 }

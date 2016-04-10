@@ -38,6 +38,12 @@ namespace GAI
 		Size GetLayerSize()const{ return mLayerWeights.size() > 0 ? mLayerWeights.front().cols() : 0; }
 		Size GetNumLayers()const{ return mLayerWeights.size() > 0 ? mLayerWeights.size() - 1 : 0; }
 
+		void Save(StringWide lsPath);
+		void Load(StringWide lsPath);
+
+		void Read(std::istream &lsPath);
+		void Write(std::ostream &lsPath);
+
 	protected:		
 		
 		MatrixDynamic<T> mInputWeights;
